@@ -25,36 +25,17 @@ d = 5;
 Additionally, it is also required to specify the range of variation of the control parameters (precision/recall in the reported example) and the number of detection sets generated at the same level of the parameters. The dataset name must also be the name of the folder which contains all the sequence info, in a tree structure similar to the one reported below. For example, for the sequence `AVG-TownCentre`:
 
 <pre>
-.
-+-- _config.yml
-+-- _drafts
-|   +-- begin-with-the-crazy-ideas.textile
-|   +-- on-simplicity-in-technology.markdown
-+-- _includes
-|   +-- footer.html
-|   +-- header.html
-+-- _layouts
-|   +-- default.html
-|   +-- post.html
-+-- _posts
-|   +-- 2007-10-29-why-every-programmer-should-play-nethack.textile
-|   +-- 2009-04-26-barcamp-boston-4-roundup.textile
-+-- _data
-|   +-- members.yml
-+-- _site
-+-- index.html
+AVG-TownCentre
+|-- gt
+|   |-- gt.txt
+|-- det
+|   |-- det.txt
+|-- img
+|   |-- 000001.jpg
+|   |-- 000002.jpg
+|   |-- ...
+|-- robustness_data
+|-- occlusions_data
 </pre>
-
-- AVG-TownCentre
- - gt
-  - gt.txt
-- - det
-- - - det.txt
-> img
-> > 000001.jpg
-> > 000002.jpg
-> > ...
-occlusions_data
-robustness_data
 
 The last two folders must be created but will be filled by the scripts that generates the degraded detections starting from the file `gt.txt`. The `det` folder is not mandatory and must only be created if true detector responses are available. The detection format in the .txt files are the one adopted in the MOT Challenge competition.
