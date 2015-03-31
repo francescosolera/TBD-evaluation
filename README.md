@@ -8,7 +8,7 @@ This MATLAB toolbox is composed of three main components:
 * **Result visualization**: is needed to reproduce the exact same plots we reported in the original paper (see ref below).
 
 ## Data degradation
-The toolbox provides 2 scripts to degrate the ground truth trajectories, **createDetectionsFromGT_OCCLUSIONS.m** and **createDetectionsFromGT_ROBUSTNESS.m**. The first one creates sets of detections with an increasing number of both occluded targets and occluded frames. The latter one instead, varies the detector precision and recall by inserting an increasing number of false positive and false negatives. Both the scripts have some configuration lines at the beginning, specifying the root folder of the toolbox and the name of the sequence to degradate.
+The toolbox provides 2 scripts to degrate the ground truth trajectories, `createDetectionsFromGT_OCCLUSIONS.m` and `createDetectionsFromGT_ROBUSTNESS.m`. The first one creates sets of detections with an increasing number of both occluded targets and occluded frames. The latter one instead, varies the detector precision and recall by inserting an increasing number of false positive and false negatives. Both the scripts have some configuration lines at the beginning, specifying the root folder of the toolbox and the name of the sequence to degradate.
 
 ```matlab
 baseFolder = 'D:\lab\TBD_evaluation';
@@ -35,4 +35,4 @@ AVG-TownCentre
 occlusions_data
 robustness_data
 
-The last two folders must be created but will be filled by the scripts that generates the degraded detections starting from the file gt.txt. The `det` folder is not mandatory and must only be created if true detector responses are available. The detection format in the .txt files are the one adopted in the MOT Challenge competition.
+The last two folders must be created but will be filled by the scripts that generates the degraded detections starting from the file `gt.txt`. The `det` folder is not mandatory and must only be created if true detector responses are available. The detection format in the .txt files are the one adopted in the MOT Challenge competition.
