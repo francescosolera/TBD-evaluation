@@ -14,6 +14,7 @@ The toolbox provides 2 scripts to degrate the ground truth trajectories, **creat
 baseFolder = 'D:\lab\TBD_evaluation';
 datasetName = 'AVG-TownCentre';
 
+% control parameters
 P_range = 0.5 : 0.1 : 1;
 R_range = 0.5 : 0.1 : 1;
 
@@ -22,7 +23,16 @@ d = 5;
 ```
 
 Additionally, it is also required to specify the range of variation of the control parameters (precision/recall in the reported example) and the number of detection sets generated at the same level of the parameters. The dataset name must also be the name of the folder which contains all the sequence info, in a tree structure similar to the one reported below. For example, for the sequence *AVG-TownCentre*:
-> c
-> > c
-> > c
-> z
+> AVG-TownCentre
+> > gt
+> > > gt.txt
+> > det
+> > > det.txt
+> > img
+> > > 000001.jpg
+> > > 000002.jpg
+> > > ...
+> occlusions_data
+> robustness_data
+
+The last two folders must be created but will be filled by the scripts that generates the degraded detections starting from the file gt.txt. The *det* folder is not mandatory and must only be created if true detector responses are available. The detection format in the .txt files are the one adopted in the MOT Challenge competition.
