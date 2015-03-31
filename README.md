@@ -61,10 +61,11 @@ trackers
 |   |   |   |-- det.txt
 </pre>
 
-Inside the `trackers` folder, one folder must exists for each tracker one which to compare. Inside each trackers specific folders, one folder for each sequence has to be created containing at least `occlusion_results` and `robustness_results`. These two folder must contain the .txt files containing the tracking results. The name of the files must be the same of the input detections so that the toolbox can parse the values of P and R (in the example) and the number of the run. Once these folder are set up as shown above, the script `evaluateExperiments.m' can be lunched. It only needs some configurations:
+Inside the `trackers` folder, one folder must exists for each tracker one which to compare. Inside each trackers specific folders, one folder for each sequence has to be created containing at least `occlusion_results` and `robustness_results`. These two folder must contain the .txt files containing the tracking results. The name of the files must be the same of the input detections so that the toolbox can parse the values of P and R (in the example) and the number of the run. Once these folder are set up as shown above, the script `evaluateExperiments.m' can be lunched. It only needs some configurations to reach the results files:
 ```matlab
 baseFolder      = 'D:\lab\TBD_evaluation';
 trackerName     = 'trk1';
 seqName         = 'AVG-TownCentre';
 resultsFolder   = 'robustness_results';
 ```
+The evaluation script is the same that can be downloaded from the MOT Challenge website. We only added a couple of lines to also save the generated tracks length so to account for our proposed measure as well. As we didn't want to change anything else of the evaluation script by MOT Challenge, it is also required to modify the `evaluator>seqmaps>seq_to_test.txt` and specify in the second line the name of the sequence to evaluate the trackers upon. First line must be left empty.
