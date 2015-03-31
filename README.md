@@ -73,3 +73,9 @@ The evaluation script is the same that can be downloaded from the MOT Challenge 
 By running this script, a `results.mat` file is created inside each results folder. This files contain all the CLEAR MOT standard metrics and our proposed tracks length measure.
 
 ## Result visualization
+The last contribution of our toolbox is a set of plots computed starting from the `results.mat` files generated in the previous sections. There are three types of plots, detailed in the paper (see reference below):
+- MOTA matrices
+- TL plots
+- TL areas
+
+The MOTA matrices describe how good a tracker is at retrieving true positives, rejecting false detections proposed by the detector and at the same time producing continuous tracks, also accounting for ID switches. Track Length (TL), instead, is the proposed metric and measures the longest sequence of frames in which each GT track was continuously and successfully tracked. So it is a value for each track. Results are then sorted in descending order in a survival curve-like plot.
