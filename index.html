@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>TBD-evaluation by francescosolera</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">TBD-evaluation</h1>
+      <h2 class="project-tagline">New evaluation protocol for tracking-by-detection methods, in a simple and easy to use MATLAB toolbox.</h2>
+      <a href="https://github.com/francescosolera/TBD-evaluation" class="btn">View on GitHub</a>
+      <a href="https://github.com/francescosolera/TBD-evaluation/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/francescosolera/TBD-evaluation/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h3>
+<a id="set-it-up-and-running" class="anchor" href="#set-it-up-and-running" aria-hidden="true"><span class="octicon octicon-link"></span></a>set it up and running</h3>
+
+<p>If you already know what this is about and want to test it out-of-the-box just download the code and run <code>DEMO.m</code>. Otherwise, keep reading.</p>
+
+<h1>
+<a id="tbd-evaluation" class="anchor" href="#tbd-evaluation" aria-hidden="true"><span class="octicon octicon-link"></span></a>TBD-evaluation</h1>
+
+<p>Conventional experiments on Multi-Target Tracking (MTT) are built upon the belief that fixing the detections to different trackers is sufficient to obtain a fair comparison. Instead, ee argue how the true behavior of a tracker is exposed when evaluated by varying the input detections rather than by fixing them. We propose a systematic and reproducible protocol and a MATLAB toolbox for generating synthetic data starting from ground truth detections, a proper set of metrics to understand and compare trackers peculiarities and respective visualization solutions.</p>
+
+<h1>
+<a id="proposed-tools" class="anchor" href="#proposed-tools" aria-hidden="true"><span class="octicon octicon-link"></span></a>proposed tools</h1>
+
+<p>This MATLAB toolbox is composed of three main components:</p>
+
+<ul>
+<li>
+<strong>Data degradation</strong>: this module is required to generate new detections from ground truth. It should only be employed for training, while generated data should be kept fixed for future comparison.</li>
+<li>
+<strong>Evaluation</strong>: this code partially extends the <em>DEVKIT</em> proposed at MOT Challenge (<a href="http://www.motchallenge.net">www.motchallenge.net</a>) with the ability to measure tracks length and automatically process a whole set of detections at different pairs of control parameters.</li>
+<li>
+<strong>Result visualization</strong>: is needed to reproduce the exact same plots we reported in the original paper (see ref below).</li>
+</ul>
+
+<h2>
+<a id="data-degradation" class="anchor" href="#data-degradation" aria-hidden="true"><span class="octicon octicon-link"></span></a>data degradation</h2>
+
+<p>The toolbox provides 2 scripts to degrate the ground truth trajectories, <code>createDetectionsFromGT_OCCLUSIONS.m</code> and <code>createDetectionsFromGT_ROBUSTNESS.m</code>. The first one creates sets of detections with an increasing number of both occluded targets and occluded frames. The latter one instead, varies the detector precision and recall by inserting an increasing number of false positive and false negatives. Both the scripts have some configuration lines at the beginning, specifying the root folder of the toolbox and the name of the sequence to degradate.</p>
+
+<div class="highlight highlight-matlab"><pre>baseFolder = <span class="pl-s"><span class="pl-pds">'</span>D:\lab\TBD_evaluation<span class="pl-pds">'</span></span>;
+datasetName = <span class="pl-s"><span class="pl-pds">'</span>AVG-TownCentre<span class="pl-pds">'</span></span>;
+
+<span class="pl-c">% control parameters</span>
+P_range = <span class="pl-c1">0.5</span><span class="pl-k"> : </span><span class="pl-c1">0.1</span><span class="pl-k"> : </span><span class="pl-c1">1</span>;
+R_range = <span class="pl-c1">0.5</span><span class="pl-k"> : </span><span class="pl-c1">0.1</span><span class="pl-k"> : </span><span class="pl-c1">1</span>;
+
+<span class="pl-c">% number of run to account for randomness</span>
+d = <span class="pl-c1">5</span>;</pre></div>
+
+<p>Additionally, it is also required to specify the range of variation of the control parameters (precision/recall in the reported example) and the number of detection sets generated at the same level of the parameters. The dataset name must also be the name of the folder which contains all the sequence info, in a tree structure similar to the one reported below. For example, for the sequence <code>AVG-TownCentre</code>:</p>
+
+<pre>
+AVG-TownCentre
+|-- gt
+|   |-- gt.txt
+|-- det
+|   |-- det.txt
+|-- img
+|   |-- 000001.jpg
+|   |-- 000002.jpg
+|   |-- ...
+|-- robustness_data
+|-- occlusions_data
+</pre>
+
+<p>The last two folders must be created but will be filled by the scripts that generates the degraded detections starting from the file <code>gt.txt</code>. The <code>det</code> folder is not mandatory and needs to be created only if true detector responses are available. The detection format in the .txt files are the one adopted in the MOT Challenge competition. By running the scripts a number of txt files in <code>_data</code> folders the will be created. This number is the product of the number of steps each control parameter has (6*6 in this case) and the number of runs (5 in the example).</p>
+
+<h2>
+<a id="evaluation" class="anchor" href="#evaluation" aria-hidden="true"><span class="octicon octicon-link"></span></a>evaluation</h2>
+
+<p>Now is the time to run the trackers you want to evaluate to create the a 1:1 output file for each one created in the previous section, <em>i.e.</em> an output for each different detection input. Once you have these results, you should organize them in a directory tree as follows. Suppose we have tested a tracker named <code>trk1</code>, then we should have in the root folder of this toolbox:</p>
+
+<pre>
+trackers
+|-- trk1
+|   |-- AVG-TownCentre
+|   |   |-- occlusions_results
+|   |   |   |-- AVG-TownCentre_P0.00_R0.00_01.txt
+|   |   |   |-- ...
+|   |   |   |-- AVG-TownCentre_P0.80_R0.60_03.txt
+|   |   |   |-- ...
+|   |   |-- robustness_results
+|   |   |   |-- AVG-TownCentre_P0.00_R0.00_01.txt
+|   |   |   |-- ...
+|   |   |   |-- AVG-TownCentre_P0.80_R0.60_03.txt
+|   |   |   |-- ...
+|   |   |-- det_results
+|   |   |   |-- det.txt
+</pre>
+
+<p>Inside the <code>trackers</code> folder, one folder must exists for each tracker one which to compare. Inside each trackers specific folders, one folder for each sequence has to be created containing at least <code>occlusion_results</code> and <code>robustness_results</code>. These two folder must contain the .txt files containing the tracking results. The name of the files must be the same of the input detections so that the toolbox can parse the values of P and R (in the example) and the number of the run. Once these folder are set up as shown above, the script <code>evaluateExperiments.m</code> can be lunched. It only needs some configurations to reach the results files:</p>
+
+<div class="highlight highlight-matlab"><pre>baseFolder      = <span class="pl-s"><span class="pl-pds">'</span>D:\lab\TBD_evaluation<span class="pl-pds">'</span></span>;
+trackerName     = <span class="pl-s"><span class="pl-pds">'</span>trk1<span class="pl-pds">'</span></span>;
+seqName         = <span class="pl-s"><span class="pl-pds">'</span>AVG-TownCentre<span class="pl-pds">'</span></span>;
+resultsFolder   = <span class="pl-s"><span class="pl-pds">'</span>robustness_results<span class="pl-pds">'</span></span>;</pre></div>
+
+<p>The evaluation script is the same that can be downloaded from the MOT Challenge website. We only added a couple of lines to also save the generated tracks length so to account for our proposed measure as well. As we didn't want to change anything else of the evaluation script by MOT Challenge, it is also required to modify the <code>evaluator &gt; seqmaps &gt; seq_to_test.txt</code> and specify in the second line the name of the sequence to evaluate the trackers upon. First line must be left empty.</p>
+
+<p>By running this script, a <code>results.mat</code> file is created inside each results folder. This files contain all the CLEAR MOT standard metrics and our proposed tracks length measure.</p>
+
+<h2>
+<a id="result-visualization" class="anchor" href="#result-visualization" aria-hidden="true"><span class="octicon octicon-link"></span></a>result visualization</h2>
+
+<p>The last contribution of our toolbox is a set of plots computed starting from the <code>results.mat</code> files generated in the previous sections. There are three types of plots, detailed in the paper (see reference below):</p>
+
+<ul>
+<li>MOTA matrices</li>
+<li>TL plots</li>
+<li>TL areas</li>
+</ul>
+
+
+
+<p align="center">
+  <img src="http://imagelab.ing.unimore.it/TBD-evaluation/images/MOTA-TL.png">
+</p>
+
+<p>These plots are created for each tracker and for each sequence in the script <code>createPlotsForSequence.m</code>, while are averaged over all sequences in the script <code>createPlotsForDataset.m</code>. For the single-sequence script, some parameter must be set:</p>
+
+<div class="highlight highlight-matlab"><pre><span class="pl-c">% names of the folders in "trackers" dir</span>
+trackerName     = {<span class="pl-s"><span class="pl-pds">'</span>trk1<span class="pl-pds">'</span></span>, ...};
+seqName         = <span class="pl-s"><span class="pl-pds">'</span>AVG-TownCentre<span class="pl-pds">'</span></span>;
+
+<span class="pl-c">% availability of true detection results (det_results folder)</span>
+plotDetection   = <span class="pl-c1">1</span>;</pre></div>
+
+<p>Similarly, these are the parameters for the datast script:</p>
+
+<div class="highlight highlight-matlab"><pre><span class="pl-c">% names of the folders in "trackers" dir</span>
+trackerName     = {<span class="pl-s"><span class="pl-pds">'</span>trk1<span class="pl-pds">'</span></span>, ...};
+sequences       = {<span class="pl-s"><span class="pl-pds">'</span>AVG-TownCentre<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>PETS09-S2L2<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>TUD-Stadtmitte<span class="pl-pds">'</span></span>, ...};</pre></div>
+
+<p>Also a comparison plot which synthetically describes the TL curves are produced:</p>
+
+<p align="center">
+  <img src="http://imagelab.ing.unimore.it/TBD-evaluation/images/comparison.png">
+</p>
+
+<p>All the plots can easily be exported from MATLAB by saving the images both in pdf or eps format to preserve the vector quality of the figure.</p>
+
+<h3>
+<a id="citation-and-contacts" class="anchor" href="#citation-and-contacts" aria-hidden="true"><span class="octicon octicon-link"></span></a>citation and contacts</h3>
+
+<p>If you use this code, please cite the following article:</p>
+
+<pre><code>Solera, F.; Calderara, S.; Cucchiara, R., "Towards the evaluation of reproducible robustness in tracking-by-detection"
+Proc. IEEE Int'l Conf. Advanced Video and Signal Based Surveillance (AVSS), Aug 2015
+URL: ...
+</code></pre>
+
+<ul>
+<li>Francesco Solera    <a href="mailto:francesco.solera@unimore.it">francesco.solera@unimore.it</a>
+</li>
+<li>Simone Calderara    <a href="mailto:simone.calderara@unimore.it">simone.calderara@unimore.it</a>
+</li>
+<li>Rita Cucchiara        <a href="mailto:rita.cucchiara@unimore.it">rita.cucchiara@unimore.it</a>
+</li>
+</ul>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/francescosolera/TBD-evaluation">TBD-evaluation</a> is maintained by <a href="https://github.com/francescosolera">francescosolera</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
+
