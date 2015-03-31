@@ -8,4 +8,15 @@ This MATLAB toolbox is composed of three main components:
 * **Result visualization**: is needed to reproduce the exact same plots we reported in the original paper (see ref below).
 
 ## Data degradation
-The toolbox provides 2 scripts to degrate the ground truth trajectories, **createDetectionsFromGT_OCCLUSIONS.m** and **createDetectionsFromGT_ROBUSTNESS.m**. The first one creates sets of detections with an increasing number of both occluded targets and occluded frames. The latter one instead, varies the detector precision and recall by inserting an increasing number of false positive and false negatives.
+The toolbox provides 2 scripts to degrate the ground truth trajectories, **createDetectionsFromGT_OCCLUSIONS.m** and **createDetectionsFromGT_ROBUSTNESS.m**. The first one creates sets of detections with an increasing number of both occluded targets and occluded frames. The latter one instead, varies the detector precision and recall by inserting an increasing number of false positive and false negatives. Both the scripts have some configuration lines at the beginning, specifying the root folder of the toolbox and the name of the sequence to degradate.
+
+```matlab
+baseFolder = 'D:\lab\TBD_evaluation';
+datasetName = 'AVG-TownCentre';
+
+P_range = 0.5 : 0.1 : 1;
+R_range = 0.5 : 0.1 : 1;
+
+% number of run to account for randomness
+d = 5;
+```
