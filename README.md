@@ -78,4 +78,15 @@ The last contribution of our toolbox is a set of plots computed starting from th
 - TL plots
 - TL areas
 
-The MOTA matrices describe how good a tracker is at retrieving true positives, rejecting false detections proposed by the detector and at the same time producing continuous tracks, also accounting for ID switches. Track Length (TL), instead, is the proposed metric and measures the longest sequence of frames in which each GT track was continuously and successfully tracked. So it is a value for each track. Results are then sorted in descending order in a survival curve-like plot.
+<!-- The MOTA matrices describe how good a tracker is at retrieving true positives, rejecting false detections proposed by the detector and at the same time producing continuous tracks, also accounting for ID switches. Track Length (TL), instead, is the proposed metric and measures the longest sequence of frames in which each GT track was continuously and successfully tracked. So it is a value for each track. Results are then sorted in descending order in a survival curve-like plot. -->
+
+These plots are created for each tracker and for each sequence in the script `createPlotsForSequence.m`, while are averaged over all sequences in the script `createPlotsForDataset.m`. Also in this script some parameter must be set:
+```matlab
+% names of the folders in "tracker" dir
+trackerName     = {'trk1', ...};
+seqName         = 'AVG-TownCentre';
+
+% availability of true detection results (det_results folder)
+plotDetection   = 1;
+```
+
