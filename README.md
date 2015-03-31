@@ -4,8 +4,8 @@ Conventional experiments on Multi-Target Tracking (MTT) are built upon the belie
 # Proposed tools
 This MATLAB toolbox is composed of three main components:
 * **Data degradation**: this module is required to generate new detections from ground truth. It should only be employed for training, while generated data should be kept fixed for future comparison.
-* **Evaluation**: this code partially extends the *DEVKIT* proposed at MOT Challenge (www.motchallenge.com) with the ability to measure tracks length and automatically process a whole set of detections at different pairs of control parameters.
+* **Evaluation**: this code partially extends the *DEVKIT* proposed at MOT Challenge (www.motchallenge.net) with the ability to measure tracks length and automatically process a whole set of detections at different pairs of control parameters.
 * **Result visualization**: is needed to reproduce the exact same plots we reported in the original paper (see ref below).
 
 ## Data degradation
-ciao ciao ciao
+The toolbox provides 2 scripts to degrate the ground truth trajectories, **createDetectionsFromGT_OCCLUSIONS.m** and **createDetectionsFromGT_ROBUSTNESS.m**. The first one creates sets of detections with an increasing number of both occluded targets and occluded frames. The latter one instead, varies the detector precision and recall by inserting an increasing number of false positive and false negatives.
