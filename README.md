@@ -38,4 +38,4 @@ AVG-TownCentre
 |-- occlusions_data
 </pre>
 
-The last two folders must be created but will be filled by the scripts that generates the degraded detections starting from the file `gt.txt`. The `det` folder is not mandatory and must only be created if true detector responses are available. The detection format in the .txt files are the one adopted in the MOT Challenge competition.
+The last two folders must be created but will be filled by the scripts that generates the degraded detections starting from the file `gt.txt`. The `det` folder is not mandatory and needs to be created only if true detector responses are available. The detection format in the .txt files are the one adopted in the MOT Challenge competition.
