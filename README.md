@@ -5,4 +5,4 @@ Conventional experiments on Multi-Target Tracking (MTT) are built upon the belie
 This MATLAB toolbox is composed of three main components:
 * ciao
 * cao
-* *miao* yeahhhh
+* **miao** yeahhhh
