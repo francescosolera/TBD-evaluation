@@ -20,3 +20,9 @@ R_range = 0.5 : 0.1 : 1;
 % number of run to account for randomness
 d = 5;
 ```
+
+Additionally, it is also required to specify the range of variation of the control parameters (precision/recall in the reported example) and the number of detection sets generated at the same level of the parameters. The dataset name must also be the name of the folder which contains all the sequence info, in a tree structure similar to the one reported below. For example, for the sequence *AVG-TownCentre*:
+> c
+> > c
+> > c
+> z
