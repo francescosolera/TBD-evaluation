@@ -1,13 +1,16 @@
+### set it up and running
+If you already know what this is about and want to test it out-of-the-box just download the code and run `DEMO.m`. Otherwise, keep reading.
+
 # TBD-evaluation
 Conventional experiments on Multi-Target Tracking (MTT) are built upon the belief that fixing the detections to different trackers is sufficient to obtain a fair comparison. Instead, ee argue how the true behavior of a tracker is exposed when evaluated by varying the input detections rather than by fixing them. We propose a systematic and reproducible protocol and a MATLAB toolbox for generating synthetic data starting from ground truth detections, a proper set of metrics to understand and compare trackers peculiarities and respective visualization solutions.
 
-# Proposed tools
+# proposed tools
 This MATLAB toolbox is composed of three main components:
 * **Data degradation**: this module is required to generate new detections from ground truth. It should only be employed for training, while generated data should be kept fixed for future comparison.
 * **Evaluation**: this code partially extends the *DEVKIT* proposed at MOT Challenge (www.motchallenge.net) with the ability to measure tracks length and automatically process a whole set of detections at different pairs of control parameters.
 * **Result visualization**: is needed to reproduce the exact same plots we reported in the original paper (see ref below).
 
-## Data degradation
+## data degradation
 The toolbox provides 2 scripts to degrate the ground truth trajectories, `createDetectionsFromGT_OCCLUSIONS.m` and `createDetectionsFromGT_ROBUSTNESS.m`. The first one creates sets of detections with an increasing number of both occluded targets and occluded frames. The latter one instead, varies the detector precision and recall by inserting an increasing number of false positive and false negatives. Both the scripts have some configuration lines at the beginning, specifying the root folder of the toolbox and the name of the sequence to degradate.
 
 ```matlab
@@ -40,7 +43,7 @@ AVG-TownCentre
 
 The last two folders must be created but will be filled by the scripts that generates the degraded detections starting from the file `gt.txt`. The `det` folder is not mandatory and needs to be created only if true detector responses are available. The detection format in the .txt files are the one adopted in the MOT Challenge competition. By running the scripts a number of txt files in `_data` folders the will be created. This number is the product of the number of steps each control parameter has (6*6 in this case) and the number of runs (5 in the example).
 
-## Evaluation
+## evaluation
 Now is the time to run the trackers you want to evaluate to create the a 1:1 output file for each one created in the previous section, *i.e.* an output for each different detection input. Once you have these results, you should organize them in a directory tree as follows. Suppose we have tested a tracker named `trk1`, then we should have in the root folder of this toolbox:
 
 <pre>
@@ -72,13 +75,17 @@ The evaluation script is the same that can be downloaded from the MOT Challenge 
 
 By running this script, a `results.mat` file is created inside each results folder. This files contain all the CLEAR MOT standard metrics and our proposed tracks length measure.
 
-## Result visualization
+## result visualization
 The last contribution of our toolbox is a set of plots computed starting from the `results.mat` files generated in the previous sections. There are three types of plots, detailed in the paper (see reference below):
 - MOTA matrices
 - TL plots
 - TL areas
 
 <!-- The MOTA matrices describe how good a tracker is at retrieving true positives, rejecting false detections proposed by the detector and at the same time producing continuous tracks, also accounting for ID switches. Track Length (TL), instead, is the proposed metric and measures the longest sequence of frames in which each GT track was continuously and successfully tracked. So it is a value for each track. Results are then sorted in descending order in a survival curve-like plot. -->
+
+<p align="center">
+  <img src="http://imagelab.ing.unimore.it/TBD-evaluation/images/MOTA-TL.png" />
+</p>
 
 These plots are created for each tracker and for each sequence in the script `createPlotsForSequence.m`, while are averaged over all sequences in the script `createPlotsForDataset.m`. For the single-sequence script, some parameter must be set:
 ```matlab
@@ -96,6 +103,22 @@ trackerName     = {'trk1', ...};
 sequences       = {'AVG-TownCentre', 'PETS09-S2L2', 'TUD-Stadtmitte', ...};
 ```
 
-These plots can easily be exported from MATLAB by saving the images both in pdf or eps format to preserve the vector quality of the figure.
+Also a comparison plot which synthetically describes the TL curves are produced:
+<p align="center">
+  <img src="http://imagelab.ing.unimore.it/TBD-evaluation/images/comparison.png" />
+</p>
 
+All the plots can easily be exported from MATLAB by saving the images both in pdf or eps format to preserve the vector quality of the figure.
 
+###citation and contacts
+If you use this code, please cite the following article:
+
+```
+Solera, F.; Calderara, S.; Cucchiara, R., "Towards the evaluation of reproducible robustness in tracking-by-detection"
+Proc. IEEE Int'l Conf. Advanced Video and Signal Based Surveillance (AVSS), Aug 2015
+URL: ...
+```
+
+- Francesco Solera    francesco.solera@unimore.it
+- Simone Calderara    simone.calderara@unimore.it
+- Rita Cucchiara        rita.cucchiara@unimore.it
