@@ -46,7 +46,7 @@
 <h2>
 <a id="data-degradation" class="anchor" href="#data-degradation" aria-hidden="true"><span class="octicon octicon-link"></span></a>data degradation</h2>
 
-<p>The toolbox provides 2 scripts to degrate the ground truth trajectories, <code>createDetectionsFromGT_OCCLUSIONS.m</code> and <code>createDetectionsFromGT_ROBUSTNESS.m</code>. The first one creates sets of detections with an increasing number of both occluded targets and occluded frames. The latter one instead, varies the detector precision and recall by inserting an increasing number of false positive and false negatives. Both the scripts have some configuration lines at the beginning, specifying the root folder of the toolbox and the name of the sequence to degradate.</p>
+<p>The toolbox provides 2 scripts to degradate the ground truth trajectories, <code>createDetectionsFromGT_OCCLUSIONS.m</code> and <code>createDetectionsFromGT_ROBUSTNESS.m</code>. The first one creates sets of detections with an increasing number of both occluded targets and occluded frames. The latter one instead, varies the detector precision and recall by inserting an increasing number of false positive and false negatives. Both the scripts have some configuration lines at the beginning, specifying the root folder of the toolbox and the name of the sequence to degradate.</p>
 
 <div class="highlight highlight-matlab"><pre>baseFolder = <span class="pl-s"><span class="pl-pds">'</span>D:\lab\TBD_evaluation<span class="pl-pds">'</span></span>;
 datasetName = <span class="pl-s"><span class="pl-pds">'</span>AVG-TownCentre<span class="pl-pds">'</span></span>;
@@ -74,12 +74,12 @@ AVG-TownCentre
 |-- occlusions_data
 </pre>
 
-<p>The last two folders must be created but will be filled by the scripts that generates the degraded detections starting from the file <code>gt.txt</code>. The <code>det</code> folder is not mandatory and needs to be created only if true detector responses are available. The detection format in the .txt files are the one adopted in the MOT Challenge competition. By running the scripts a number of txt files in <code>_data</code> folders the will be created. This number is the product of the number of steps each control parameter has (6*6 in this case) and the number of runs (5 in the example).</p>
+<p>The last two folders must be created but will be filled by the scripts that generates the degraded detections starting from the file <code>gt.txt</code>. The <code>det</code> folder is not mandatory and needs to be created only if true detector responses are available. The detections and ground truth format in the .txt files is the one adopted in the MOT Challenge benchmark. By running the scripts, a number of .txt files in the <code>_data</code> folders the will be created. This number is the product of the number of steps each control parameter has (6*6 in this case) and the number of runs (5 in the example).</p>
 
 <h2>
 <a id="evaluation" class="anchor" href="#evaluation" aria-hidden="true"><span class="octicon octicon-link"></span></a>evaluation</h2>
 
-<p>Now is the time to run the trackers you want to evaluate to create the a 1:1 output file for each one created in the previous section, <em>i.e.</em> an output for each different detection input. Once you have these results, you should organize them in a directory tree as follows. Suppose we have tested a tracker named <code>trk1</code>, then we should have in the root folder of this toolbox:</p>
+<p>Now is the time to run the trackers you want to evaluate and create an output file for each detection file created in the previous section. Once you have these results, you should organize them in a directory tree as follows. Suppose we have tested a tracker named <code>trk1</code>, in the root folder of this toolbox we should find:</p>
 
 <pre>
 trackers
@@ -99,21 +99,21 @@ trackers
 |   |   |   |-- det.txt
 </pre>
 
-<p>Inside the <code>trackers</code> folder, one folder must exists for each tracker one which to compare. Inside each trackers specific folders, one folder for each sequence has to be created containing at least <code>occlusion_results</code> and <code>robustness_results</code>. These two folder must contain the .txt files containing the tracking results. The name of the files must be the same of the input detections so that the toolbox can parse the values of P and R (in the example) and the number of the run. Once these folder are set up as shown above, the script <code>evaluateExperiments.m</code> can be lunched. It only needs some configurations to reach the results files:</p>
+<p>Inside the <code>trackers</code> folder, one folder must exists for each tracker one whish to compare. Inside each tracker specific folder, one folder for each sequence has to be created containing at least <code>occlusion_results</code> and <code>robustness_results</code>. These two folders must contain the .txt files of the tracker results. The name of the files must be the same one of the input detections file, so that the toolbox can parse the values of P and R (in the example) and the number of the run. Once these folder are set up as shown above, the script <code>evaluateExperiments.m</code> can be lunched. It only needs some configurations to reach the results files:</p>
 
 <div class="highlight highlight-matlab"><pre>baseFolder      = <span class="pl-s"><span class="pl-pds">'</span>D:\lab\TBD_evaluation<span class="pl-pds">'</span></span>;
 trackerName     = <span class="pl-s"><span class="pl-pds">'</span>trk1<span class="pl-pds">'</span></span>;
 seqName         = <span class="pl-s"><span class="pl-pds">'</span>AVG-TownCentre<span class="pl-pds">'</span></span>;
 resultsFolder   = <span class="pl-s"><span class="pl-pds">'</span>robustness_results<span class="pl-pds">'</span></span>;</pre></div>
 
-<p>The evaluation script is the same that can be downloaded from the MOT Challenge website. We only added a couple of lines to also save the generated tracks length so to account for our proposed measure as well. As we didn't want to change anything else of the evaluation script by MOT Challenge, it is also required to modify the <code>evaluator &gt; seqmaps &gt; seq_to_test.txt</code> and specify in the second line the name of the sequence to evaluate the trackers upon. First line must be left empty.</p>
+<p>The evaluation script is the same that can be downloaded from the MOT Challenge website. We only added a couple of lines to also save the generated tracks length to account for our proposed measure as well. As we didn't want to change anything else of the evaluation script by MOT Challenge, we also required to manually modify the <code>evaluator &gt; seqmaps &gt; seq_to_test.txt</code> and specify, in the second line, the name of the test sequence. First line must be left empty.</p>
 
-<p>By running this script, a <code>results.mat</code> file is created inside each results folder. This files contain all the CLEAR MOT standard metrics and our proposed tracks length measure.</p>
+<p>By running this script, a <code>results.mat</code> file is created inside each results folder. This .mat files contain all the CLEAR MOT standard metrics and our proposed tracks length measure.</p>
 
 <h2>
 <a id="result-visualization" class="anchor" href="#result-visualization" aria-hidden="true"><span class="octicon octicon-link"></span></a>result visualization</h2>
 
-<p>The last contribution of our toolbox is a set of plots computed starting from the <code>results.mat</code> files generated in the previous sections. There are three types of plots, detailed in the paper (see reference below):</p>
+<p>The last contribution of our toolbox is a set of plots obtained from the <code>results.mat</code> files generated in the previous sections. There are three types of plots, detailed in the paper (see reference below):</p>
 
 <ul>
 <li>MOTA matrices</li>
@@ -127,33 +127,37 @@ resultsFolder   = <span class="pl-s"><span class="pl-pds">'</span>robustness_res
   <img src="http://imagelab.ing.unimore.it/TBD-evaluation/images/MOTA-TL.png">
 </p>
 
-<p>These plots are created for each tracker and for each sequence in the script <code>createPlotsForSequence.m</code>, while are averaged over all sequences in the script <code>createPlotsForDataset.m</code>. For the single-sequence script, some parameter must be set:</p>
+<p>These plots are created for each tracker and for each sequence in the script <code>createPlotsForSequence.m</code>, while are averaged over all the sequences in the script <code>createPlotsForDataset.m</code>. For the single-sequence script, some parameter must be set:</p>
 
-<div class="highlight highlight-matlab"><pre><span class="pl-c">% names of the folders in "trackers" dir</span>
+<div class="highlight highlight-matlab"><pre>baseFolder      = <span class="pl-s"><span class="pl-pds">'</span>D:\lab\TBD_evaluation<span class="pl-pds">'</span></span>;
+
+<span class="pl-c">% names of the folders in "trackers" dir</span>
 trackerName     = {<span class="pl-s"><span class="pl-pds">'</span>trk1<span class="pl-pds">'</span></span>, ...};
 seqName         = <span class="pl-s"><span class="pl-pds">'</span>AVG-TownCentre<span class="pl-pds">'</span></span>;
 
 <span class="pl-c">% availability of true detection results (det_results folder)</span>
 plotDetection   = <span class="pl-c1">1</span>;</pre></div>
 
-<p>Similarly, these are the parameters for the datast script:</p>
+<p>Similarly, these are the parameters for the dataset script:</p>
 
-<div class="highlight highlight-matlab"><pre><span class="pl-c">% names of the folders in "trackers" dir</span>
+<div class="highlight highlight-matlab"><pre>baseFolder      = <span class="pl-s"><span class="pl-pds">'</span>D:\lab\TBD_evaluation<span class="pl-pds">'</span></span>;
+
+<span class="pl-c">% names of the folders in "trackers" dir</span>
 trackerName     = {<span class="pl-s"><span class="pl-pds">'</span>trk1<span class="pl-pds">'</span></span>, ...};
 sequences       = {<span class="pl-s"><span class="pl-pds">'</span>AVG-TownCentre<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>PETS09-S2L2<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>TUD-Stadtmitte<span class="pl-pds">'</span></span>, ...};</pre></div>
 
-<p>Also a comparison plot which synthetically describes the TL curves are produced:</p>
+<p>Moreover, a comparison plot which synthetically describes the TL curves is also produced:</p>
 
 <p align="center">
   <img src="http://imagelab.ing.unimore.it/TBD-evaluation/images/comparison.png">
 </p>
 
-<p>All the plots can easily be exported from MATLAB by saving the images both in pdf or eps format to preserve the vector quality of the figure.</p>
+<p>All the plots can easily be exported from MATLAB by saving them in pdf or eps format, preserving the vector quality of the figure.</p>
 
 <h3>
 <a id="data" class="anchor" href="#data" aria-hidden="true"><span class="octicon octicon-link"></span></a>data</h3>
 
-<p>By downloading the code, you can fully reproduce all the plots from the paper. This is because the plotting scripts use only the result files created by the evaluation code. To reduce the size of this archive, we didn't include the synthtetic generated data and trackers results, but you can download them from:</p>
+<p>By downloading the code, you can fully reproduce all the plots from the paper. This is because the plotting scripts use only the .mat result files created by the evaluation code, which are provided with the code. To reduce the size of this archive, we didn't include the synthtetic generated data and trackers results, but you can still download them from:</p>
 
 <ul>
 <li>PETS09-S2L2 - <a href="http://goo.gl/UbNWpx">http://goo.gl/UbNWpx</a>
