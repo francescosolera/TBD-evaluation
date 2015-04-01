@@ -11,7 +11,7 @@ This MATLAB toolbox is composed of three main components:
 * **Result visualization**: is needed to reproduce the exact same plots we reported in the original paper (see ref below).
 
 ## data degradation
-The toolbox provides 2 scripts to degrate the ground truth trajectories, `createDetectionsFromGT_OCCLUSIONS.m` and `createDetectionsFromGT_ROBUSTNESS.m`. The first one creates sets of detections with an increasing number of both occluded targets and occluded frames. The latter one instead, varies the detector precision and recall by inserting an increasing number of false positive and false negatives. Both the scripts have some configuration lines at the beginning, specifying the root folder of the toolbox and the name of the sequence to degradate.
+The toolbox provides 2 scripts to degradate the ground truth trajectories, `createDetectionsFromGT_OCCLUSIONS.m` and `createDetectionsFromGT_ROBUSTNESS.m`. The first one creates sets of detections with an increasing number of both occluded targets and occluded frames. The latter one instead, varies the detector precision and recall by inserting an increasing number of false positive and false negatives. Both the scripts have some configuration lines at the beginning, specifying the root folder of the toolbox and the name of the sequence to degradate.
 
 ```matlab
 baseFolder = 'D:\lab\TBD_evaluation';
@@ -41,10 +41,10 @@ AVG-TownCentre
 |-- occlusions_data
 </pre>
 
-The last two folders must be created but will be filled by the scripts that generates the degraded detections starting from the file `gt.txt`. The `det` folder is not mandatory and needs to be created only if true detector responses are available. The detection format in the .txt files are the one adopted in the MOT Challenge competition. By running the scripts a number of txt files in `_data` folders the will be created. This number is the product of the number of steps each control parameter has (6*6 in this case) and the number of runs (5 in the example).
+The last two folders must be created but will be filled by the scripts that generates the degraded detections starting from the file `gt.txt`. The `det` folder is not mandatory and needs to be created only if true detector responses are available. The detections and ground truth format in the .txt files is the one adopted in the MOT Challenge benchmark. By running the scripts, a number of .txt files in the `_data` folders the will be created. This number is the product of the number of steps each control parameter has (6*6 in this case) and the number of runs (5 in the example).
 
 ## evaluation
-Now is the time to run the trackers you want to evaluate to create the a 1:1 output file for each one created in the previous section, *i.e.* an output for each different detection input. Once you have these results, you should organize them in a directory tree as follows. Suppose we have tested a tracker named `trk1`, then we should have in the root folder of this toolbox:
+Now is the time to run the trackers you want to evaluate and create an output file for each detection file created in the previous section. Once you have these results, you should organize them in a directory tree as follows. Suppose we have tested a tracker named `trk1`, in the root folder of this toolbox we should find:
 
 <pre>
 trackers
@@ -64,19 +64,19 @@ trackers
 |   |   |   |-- det.txt
 </pre>
 
-Inside the `trackers` folder, one folder must exists for each tracker one which to compare. Inside each trackers specific folders, one folder for each sequence has to be created containing at least `occlusion_results` and `robustness_results`. These two folder must contain the .txt files containing the tracking results. The name of the files must be the same of the input detections so that the toolbox can parse the values of P and R (in the example) and the number of the run. Once these folder are set up as shown above, the script `evaluateExperiments.m` can be lunched. It only needs some configurations to reach the results files:
+Inside the `trackers` folder, one folder must exists for each tracker one whish to compare. Inside each tracker specific folder, one folder for each sequence has to be created containing at least `occlusion_results` and `robustness_results`. These two folders must contain the .txt files of the tracker results. The name of the files must be the same one of the input detections file, so that the toolbox can parse the values of P and R (in the example) and the number of the run. Once these folder are set up as shown above, the script `evaluateExperiments.m` can be lunched. It only needs some configurations to reach the results files:
 ```matlab
 baseFolder      = 'D:\lab\TBD_evaluation';
 trackerName     = 'trk1';
 seqName         = 'AVG-TownCentre';
 resultsFolder   = 'robustness_results';
 ```
-The evaluation script is the same that can be downloaded from the MOT Challenge website. We only added a couple of lines to also save the generated tracks length so to account for our proposed measure as well. As we didn't want to change anything else of the evaluation script by MOT Challenge, it is also required to modify the `evaluator > seqmaps > seq_to_test.txt` and specify in the second line the name of the sequence to evaluate the trackers upon. First line must be left empty.
+The evaluation script is the same that can be downloaded from the MOT Challenge website. We only added a couple of lines to also save the generated tracks length to account for our proposed measure as well. As we didn't want to change anything else of the evaluation script by MOT Challenge, we also required to manually modify the `evaluator > seqmaps > seq_to_test.txt` and specify, in the second line, the name of the test sequence. First line must be left empty.
 
-By running this script, a `results.mat` file is created inside each results folder. This files contain all the CLEAR MOT standard metrics and our proposed tracks length measure.
+By running this script, a `results.mat` file is created inside each results folder. This .mat files contain all the CLEAR MOT standard metrics and our proposed tracks length measure.
 
 ## result visualization
-The last contribution of our toolbox is a set of plots computed starting from the `results.mat` files generated in the previous sections. There are three types of plots, detailed in the paper (see reference below):
+The last contribution of our toolbox is a set of plots obtained from the `results.mat` files generated in the previous sections. There are three types of plots, detailed in the paper (see reference below):
 - MOTA matrices
 - TL plots
 - TL areas
@@ -87,8 +87,10 @@ The last contribution of our toolbox is a set of plots computed starting from th
   <img src="http://imagelab.ing.unimore.it/TBD-evaluation/images/MOTA-TL.png" />
 </p>
 
-These plots are created for each tracker and for each sequence in the script `createPlotsForSequence.m`, while are averaged over all sequences in the script `createPlotsForDataset.m`. For the single-sequence script, some parameter must be set:
+These plots are created for each tracker and for each sequence in the script `createPlotsForSequence.m`, while are averaged over all the sequences in the script `createPlotsForDataset.m`. For the single-sequence script, some parameter must be set:
 ```matlab
+baseFolder      = 'D:\lab\TBD_evaluation';
+
 % names of the folders in "trackers" dir
 trackerName     = {'trk1', ...};
 seqName         = 'AVG-TownCentre';
@@ -96,22 +98,24 @@ seqName         = 'AVG-TownCentre';
 % availability of true detection results (det_results folder)
 plotDetection   = 1;
 ```
-Similarly, these are the parameters for the datast script:
+Similarly, these are the parameters for the dataset script:
 ```matlab
+baseFolder      = 'D:\lab\TBD_evaluation';
+
 % names of the folders in "trackers" dir
 trackerName     = {'trk1', ...};
 sequences       = {'AVG-TownCentre', 'PETS09-S2L2', 'TUD-Stadtmitte', ...};
 ```
 
-Also a comparison plot which synthetically describes the TL curves are produced:
+Moreover, a comparison plot which synthetically describes the TL curves is also produced:
 <p align="center">
   <img src="http://imagelab.ing.unimore.it/TBD-evaluation/images/comparison.png" />
 </p>
 
-All the plots can easily be exported from MATLAB by saving the images both in pdf or eps format to preserve the vector quality of the figure.
+All the plots can easily be exported from MATLAB by saving them in pdf or eps format, preserving the vector quality of the figure.
 
 ### data
-By downloading the code, you can fully reproduce all the plots from the paper. This is because the plotting scripts use only the result files created by the evaluation code. To reduce the size of this archive, we didn't include the synthtetic generated data and trackers results, but you can download them from:
+By downloading the code, you can fully reproduce all the plots from the paper. This is because the plotting scripts use only the .mat result files created by the evaluation code, which are provided with the code. To reduce the size of this archive, we didn't include the synthtetic generated data and trackers results, but you can still download them from:
 * PETS09-S2L2 - http://goo.gl/UbNWpx
 * TUD-Stadmitte - http://goo.gl/B5XVuK
 * AVG-TownCentre - http://goo.gl/p6zfgf
