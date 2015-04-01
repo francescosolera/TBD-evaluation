@@ -110,7 +110,13 @@ Also a comparison plot which synthetically describes the TL curves are produced:
 
 All the plots can easily be exported from MATLAB by saving the images both in pdf or eps format to preserve the vector quality of the figure.
 
-###citation and contacts
+### data
+By downloading the code, you can fully reproduce all the plots from the paper. This is because the plotting scripts use only the result files created by the evaluation code. To reduce the size of this archive, we didn't include the synthtetic generated data and trackers results, but you can download them from:
+* PETS09-S2L2 - http://goo.gl/UbNWpx
+* TUD-Stadmitte - http://goo.gl/B5XVuK
+* AVG-TownCentre - http://goo.gl/p6zfgf
+
+### citation and contacts
 If you use this code, please cite the following article:
 
 ```
