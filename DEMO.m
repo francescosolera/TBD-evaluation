@@ -27,9 +27,7 @@ fprintf('- note the number of GT tracks in the TL plots is the sum of all the GT
 %% ADDITIONAL INFO:
 fprintf('----------------------------------------------------------------------------------------------------------------\n\n');
 fprintf('To reduce the size of this archive, we didn''t include the synthtetic generated data and the tracker results.\n');
-fprintf('You can download them from:\n');
-fprintf('PETS09-S2L2    - http://goo.gl/UbNWpx\n');
-fprintf('TUD-Stadmitte  - http://goo.gl/B5XVuK\n');
-fprintf('AVG-TownCentre - http://goo.gl/p6zfgf\n\n');
+fprintf('You can download them from: http://imagelab.ing.unimore.it/TBD-evaluation\n\n');
+
 fprintf('Or you can generate your own files through the [createDetectionsFromGT_OCCLUSIONS.m] and [createDetectionsFromGT_ROBUSTNESS.m] scripts.\n');
 fprintf('For more information on the use of these scripts, read the guide.\n');
