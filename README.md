@@ -117,8 +117,8 @@ All the plots can easily be exported from MATLAB by saving them in pdf or eps fo
 ### data
 By downloading the code, you can fully reproduce all the plots from the paper. This is because the plotting scripts use only the .mat result files created by the evaluation code, which are provided with the code. To reduce the size of this archive, we didn't include the synthtetic generated data and trackers results, but you can still download them from:
 * <a href="http://imagelab.ing.unimore.it/TBD-evaluation/PETS09-S2L2.zip">PETS09-S2L2</a>
-* TUD-Stadmitte - http://goo.gl/B5XVuK
-* AVG-TownCentre - http://goo.gl/p6zfgf
+* <a href="http://imagelab.ing.unimore.it/TBD-evaluation/TUD-Stadmitte.zip">TUD-Stadmitte</a>
+* <a href="http://imagelab.ing.unimore.it/TBD-evaluation/AVG-TownCentre.zip">AVG-TownCentre</a>
 
 ### citation and contacts
 If you use this code, please cite the following article:
