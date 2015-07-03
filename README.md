@@ -116,7 +116,7 @@ All the plots can easily be exported from MATLAB by saving them in pdf or eps fo
 
 ### data
 By downloading the code, you can fully reproduce all the plots from the paper. This is because the plotting scripts use only the .mat result files created by the evaluation code, which are provided with the code. To reduce the size of this archive, we didn't include the synthtetic generated data and trackers results, but you can still download them from:
-* PETS09-S2L2 - http://goo.gl/UbNWpx
+* <a href="http://imagelab.ing.unimore.it/TBD-evaluation/PETS09-S2L2.zip">PETS09-S2L2</a>
 * TUD-Stadmitte - http://goo.gl/B5XVuK
 * AVG-TownCentre - http://goo.gl/p6zfgf
 
@@ -126,7 +126,6 @@ If you use this code, please cite the following article:
 ```
 Solera, F.; Calderara, S.; Cucchiara, R., "Towards the evaluation of reproducible robustness in tracking-by-detection"
 Proc. IEEE Int'l Conf. Advanced Video and Signal Based Surveillance (AVSS), Aug 2015
-URL: ...
 ```
 
 - Francesco Solera    francesco.solera@unimore.it
